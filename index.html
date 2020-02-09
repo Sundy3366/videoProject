@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>demo</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html, body{
+            overflow: hidden;
+        }
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+        #vid-container{
+            margin: 0;
+            position: absolute;
+            z-index: 10000;
+            /*background-color: black;*/
+            width: 100%;
+            height: auto;
+            top:0;
+            bottom: 0px;
+        }
+        .video-main{
+            display: none;
+        }
+        .start-btn{
+            width: 200px;
+            height: 50px;
+            line-height: 50px;
+            background: white;
+            margin: 0 auto;
+            margin-top: 50%;
+            text-align: center;
+            z-index: 10000
+        }
+       .coverBg{
+           width: 100%;
+           height: 100%;
+           background: #000;
+           opacity: 0.6;
+           position: fixed;
+           left: 0;
+           bottom:0;
+           display: none;
+       }
+        .selectUl {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            position: absolute;
+            bottom:100px;
+            width: 100%;
+        }
+        .selectUl li{
+            display: inline-block;
+            border-radius: 20px;
+            border: 2px solid #fff;
+            text-indent: 20px;
+            color: #fff;
+            font-size: 16px;
+            height: 40px;
+            line-height: 40px;
+            width: 90%;
+            margin-bottom: 10px;
+
+        }
+    </style>
+</head>
+<body>
+    <div id="vid-container">
+        <div class="start-btn">开始</div>
+        <div class="video-main">
+            <video width="100%" height="100%" id="myVideo"  preload="auto"
+                   x-webkit-airplay="allow"
+                   webkit-playsinline=""true playsinline="true" controls >
+                <source src="https://gongyi3cdn.tencent-cloud.net/gywy19/media/90s.mp4?v=1.0.3" type="video/mp4">
+            </video>
+        </div>
+        <div class="coverBg">
+            <ul class="selectUl">
+                <li data-url="1581225370307946.mp4">选择A</li>
+                <li>选择B</li>
+            </ul>
+
+        </div>
+    </div>
+
+</body>
+<script src="jquery-1.11.0.min.js"></script>
+<script>
+    var myVideo = document.getElementById("myVideo");
+    var isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+    $('.start-btn').off('click').on('click',function () {
+        $(this).hide()
+
+        $('.video-main').show()
+        $('#myVideo').height('100%')
+
+        myVideo.play();
+    })
+    //JS绑定自动播放（操作window时，播放音乐）
+   /* $(window).one('touchstart', function(){
+        video.play();
+    })
+*/
+    //微信下兼容处理
+    /*document.addEventListener("WeixinJSBridgeReady", function () {
+        video.play();
+    }, false);*/
+
+    myVideo.oncanplay = function(){
+        console.log("准备就绪");
+
+    };
+    //监听播放开始
+    myVideo.addEventListener('play',function(){
+        console.log("开始播放");
+    });
+
+    //监听播放结束
+    myVideo.addEventListener('pause',function(){
+        console.log("播放暂停");
+    });
+
+    //监听播放结束
+    myVideo.onended = function(){
+
+        $('.video-main').hide()
+        console.log("播放结束");
+        $('.coverBg,.selectUl').show()
+    };
+    $('.selectUl li').eq(0).off('click').on('click',function () {
+        $('.coverBg,.selectUl').hide()
+        myVideo.src = "1581225370307946.mp4"
+        myVideo.play();
+    })
+    $('.selectUl li').eq(1).off('click').on('click',function () {
+        $('.coverBg,.selectUl').hide()
+        myVideo.src = "1581225641035243.mp4"
+        myVideo.play();
+    })
+</script>
+</html>
